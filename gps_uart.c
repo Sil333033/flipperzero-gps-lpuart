@@ -20,15 +20,15 @@ static void gps_uart_on_irq_cb(UartIrqEvent ev, uint8_t data, void* context) {
 }
 
 static void gps_uart_serial_init(GpsUart* gps_uart) {
-    furi_hal_console_disable();
-    furi_hal_uart_set_irq_cb(FuriHalUartIdUSART1, gps_uart_on_irq_cb, gps_uart);
-    furi_hal_uart_set_br(FuriHalUartIdUSART1, gps_uart->baudrate);
+    furi_hal_uart_init(FuriHalUartIdLPUART1, gps_uart->baudrate);
+    furi_hal_uart_set_irq_cb(FuriHalUartIdLPUART1, gps_uart_on_irq_cb, gps_uart);
+    furi_hal_uart_set_br(FuriHalUartIdLPUART1, gps_uart->baudrate);
 }
 
 static void gps_uart_serial_deinit(GpsUart* gps_uart) {
     UNUSED(gps_uart);
-    furi_hal_uart_set_irq_cb(FuriHalUartIdUSART1, NULL, NULL);
-    furi_hal_console_enable();
+    furi_hal_uart_set_irq_cb(FuriHalUartIdLPUART1, NULL, NULL);
+    furi_hal_uart_deinit(FuriHalUartIdLPUART1);
 }
 
 static void gps_uart_parse_nmea(GpsUart* gps_uart, char* line) {
